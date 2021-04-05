@@ -42,3 +42,24 @@ curl -i -X DELETE http://localhost:8080/users/1/
 curl -i http://localhost:8080/users/
 ```
 ![Получение всех пользователей](images/5.jpg)
+#
+
+**6. Создание нескольких записей в телефонных книгах пользователей. Пользователи должны быть уже созданы!**
+```
+curl -H Content-Type:application/json -X POST -d "{\"id\":\"1\",\"name\":\"Contact 1\",\"phone\":\"1234567\"}" http://localhost:8080/users/1/phonebook/
+curl -H Content-Type:application/json -X POST -d "{\"id\":\"2\",\"name\":\"Contact 2\",\"phone\":\"2222222\"}" http://localhost:8080/users/1/phonebook/
+curl -H Content-Type:application/json -X POST -d "{\"id\":\"3\",\"name\":\"Contact 3\",\"phone\":\"3333333\"}" http://localhost:8080/users/1/phonebook/
+curl -H Content-Type:application/json -X POST -d "{\"id\":\"1\",\"name\":\"Contact 1\",\"phone\":\"1111111\"}" http://localhost:8080/users/2/phonebook/
+curl -H Content-Type:application/json -X POST -d "{\"id\":\"2\",\"name\":\"Contact 2\",\"phone\":\"2222222\"}" http://localhost:8080/users/2/phonebook/
+curl -H Content-Type:application/json -X POST -d "{\"id\":\"1\",\"name\":\"User 1\",\"phone\":\"1231231\"}" http://localhost:8080/users/3/phonebook/
+curl -H Content-Type:application/json -X POST -d "{\"id\":\"2\",\"name\":\"User 2\",\"phone\":\"3213213\"}" http://localhost:8080/users/3/phonebook/
+```
+![Создание записи в телефонной книге пользователя](images/6.jpg)
+#
+
+**7. Обновление записи в телефонной книге пользователя**
+```
+curl -i -H Content-Type:application/json -X PUT -d "{\"id\":\"1\",\"name\":\"Update User\",\"phone\":\"7654321\"}" http://localhost:8080/users/1/phonebook/
+```
+![Обновление записи в телефонной книге пользователя](images/7.jpg)
+#
