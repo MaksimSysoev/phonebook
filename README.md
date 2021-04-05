@@ -7,7 +7,7 @@
 > * Поиск пользователей по имени (или его части)
 > * Поиск телефонной записи по номеру телефона
 
-*В качестве запросов к серверу использовал консольную утилиту* [Curl](https://curl.haxx.se/download.html)
+***В качестве запросов к серверу использовал консольную утилиту*** [Curl](https://curl.haxx.se/download.html)
 
 **1. Создание нового пользователя** 
 ```
@@ -15,3 +15,30 @@ curl -H Content-Type:application/json -X POST -d "{\"name\":\"Maxim\",\"list\":"
 ```
 ![Создание нового пользователя](images/1.jpg)
 #
+
+**2. Получение пользователя по id** 
+```
+curl -i http://localhost:8080/users/1/
+```
+![Получение пользователя по id](images/2.jpg)
+#
+
+**3. Обновление пользователя с id=1** 
+```
+curl -i -H Content-Type:application/json -X PUT -d "{\"id\":\"1\",\"name\":\"Update User\"}" http://localhost:8080/users/
+```
+![Обновление пользователя с id=1](images/3.jpg)
+#
+
+**4. Удаление пользователя с id=1** 
+```
+curl -i -X DELETE http://localhost:8080/users/1/
+```
+![Удаление пользователя с id=1](images/4.jpg)
+#
+
+**5. Получение всех пользователей**
+```
+curl -i http://localhost:8080/users/
+```
+![Получение всех пользователей](images/5.jpg)
