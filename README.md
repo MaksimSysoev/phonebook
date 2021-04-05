@@ -8,7 +8,7 @@
 > * Поиск телефонной записи по номеру телефона
 
 ***В качестве запросов к серверу использовал консольную утилиту*** [Curl](https://curl.haxx.se/download.html)
-
+#
 **1. Создание нового пользователя** 
 ```
 curl -H Content-Type:application/json -X POST -d "{\"name\":\"Maxim\",\"list\":"[""]"}" http://localhost:8080/users/
