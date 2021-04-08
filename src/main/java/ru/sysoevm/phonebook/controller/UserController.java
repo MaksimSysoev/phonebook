@@ -155,10 +155,12 @@ public class UserController {
      * @return
      */
     @GetMapping("/search/name")
-    public List<User> findUsersByName(@RequestParam String name) {
-        return StreamSupport.stream(
-                this.users.findUsersByName(name).spliterator(), false
-        ).collect(Collectors.toList());
+    public ResponseEntity<User> findUsersByName(@RequestParam String name) {
+        var entry = this.users.findUsersByName(name);
+        return new ResponseEntity<User>(
+                entry,
+                entry!=null ? HttpStatus.OK : HttpStatus.NOT_FOUND
+        );
     }
 
     /**
