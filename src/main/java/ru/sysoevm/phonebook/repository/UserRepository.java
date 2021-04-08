@@ -4,12 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import ru.sysoevm.phonebook.domain.PhoneBookEntry;
 import ru.sysoevm.phonebook.domain.User;
-
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,23 +19,12 @@ public class UserRepository {
     private ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();
 
     /**
-     * Ключ в коллекции users .
-     */
-    private AtomicInteger id = new AtomicInteger(1);
-
-    /**
-     * Id созданного пользователя.
-     */
-    private AtomicInteger userId = new AtomicInteger(1);
-
-    /**
      * Создание пользователя.
      * @param user передаётся пользователь
      * @return статус создан
      */
     public HttpStatus createUser(User user) {
-        user.setId((int)(userId.getAndIncrement()));
-        users.put(id.getAndIncrement(), user);
+        users.put(user.getId(), user);
         return HttpStatus.CREATED;
     }
 
@@ -47,16 +34,7 @@ public class UserRepository {
      * @return объект типа User
      */
     public User findById(int id) {
-        User findUser = null;
-        for (User user : findAll()) {
-            if (user.getId() == id) {
-                findUser = new User();
-                findUser.setId(user.getId());
-                findUser.setName(user.getName());
-                findUser.setPhoneBook(user.getPhoneBook());
-                break;
-            }
-        }
+        User findUser = users.get(id);
         if (findUser==null) {
             HttpStatus.NOT_FOUND.value();
         }
@@ -65,70 +43,66 @@ public class UserRepository {
 
     /**
      * Обновляет пользователя. Поиск пользователя осуществляется по id.
-     * @param user переданный объект должен быть с таким же id, как и не обновляемый
+     * @param newUser переданный объект должен быть с таким же id, как и не обновляемый
      */
-    public void update(User user) {
-        for (Map.Entry<Integer, User> entry : users.entrySet()) {
-            if (user.getId() == entry.getValue().getId()) {
-                users.replace(entry.getKey(), user);
-                break;
-            }
+    public HttpStatus update(User newUser) {
+        User oldUser = users.get(newUser.getId());
+        int userID = newUser.getId();
+
+        if (users.replace(userID, oldUser, newUser)) {
+            return HttpStatus.CREATED;
         }
+        return HttpStatus.NOT_FOUND;
     }
 
     /**
      * Удаляет пользователя из хранилища. ПОиск осуществляется по id
      * @param user удаляемый объект
      */
-    public void delete(User user) {
-        for (Map.Entry<Integer, User> entry : users.entrySet()) {
-            if (user.getId()==entry.getValue().getId()) {
-                users.remove(entry.getKey());
-                break;
-            }
+    public HttpStatus delete(User user) {
+        int userID = user.getId();
+        if (users.remove(userID, user)) {
+            return HttpStatus.OK;
         }
+        return HttpStatus.NOT_FOUND;
     }
 
     /**
      * Поиск всех созданных пользователей
-     * @return коллекцию типа List<User>
+     * @return коллекцию типа Collection<User>
      */
-    public List<User> findAll() {
-        List<User> result = new ArrayList<>();
-        for (Map.Entry<Integer, User> entry : users.entrySet()) {
-            User user = entry.getValue();
-            result.add(user);
-        }
-        return result;
+    public Collection<User> findAll() {
+        return users.values();
     }
 
     /**
      * Создаёт запись в телефонной книге пользователя
-     * @param id пользователя к которому добавляется запись в телефонную книгу
+     * @param userId пользователя к которому добавляется запись в телефонную книгу
      * @param entry запись
      * @return статус создано
      */
-    public HttpStatus createEntry(int id, PhoneBookEntry entry) {
-        User user = findById(id);
+    public HttpStatus createEntry(int userId, PhoneBookEntry entry) {
+        User user = findById(userId);
         user.getPhoneBook().add(entry);
         return HttpStatus.CREATED;
     }
 
     /**
      * Обновляет запись в телефонной книге пользователя
-     * @param id пользователя
-     * @param entry обновлённая запись
+     * @param userId пользователя
+     * @param newEntry обновлённая запись
      */
-    public void updateEntry(int id, PhoneBookEntry entry) {
-        User user = findById(id);
+    public void updateEntry(int userId, PhoneBookEntry newEntry) {
+        User user = findById(userId);
         for (PhoneBookEntry e : user.getPhoneBook()) {
-            if (entry.getId()==e.getId()) {
-                e.setId(entry.getId());
-                e.setName(entry.getName());
-                e.setPhone(entry.getPhone());
+            if (newEntry.getId()==e.getId()) {
+                e.setId(newEntry.getId());
+                e.setName(newEntry.getName());
+                e.setPhone(newEntry.getPhone());
                 break;
             }
         }
+
     }
 
     /**
@@ -170,7 +144,6 @@ public class UserRepository {
                 break;
             }
         }
-
     }
 
     /**
@@ -179,12 +152,7 @@ public class UserRepository {
      * @return список типа List<PhoneBookEntry>
      */
     public List<PhoneBookEntry> findAllEntry(int userId) {
-        List<PhoneBookEntry> result = new ArrayList<>();
-        User user = findById(userId);
-        for(PhoneBookEntry entry : user.getPhoneBook()) {
-            result.add(entry);
-        }
-        return result;
+        return findById(userId).getPhoneBook();
     }
 
     /**
@@ -192,17 +160,19 @@ public class UserRepository {
      * @param name искомое имя или часть
      * @return список типа List<User>
      */
-    public List<User> findUsersByName(String name) {
-        List<User> result = new ArrayList<>();
+    public User findUsersByName(String name) {
+        User findUser = new User();
         Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
         for (Map.Entry<Integer, User> entry : users.entrySet()) {
             User user = entry.getValue();
             Matcher matcher = pattern.matcher(user.getName());
             if (matcher.find()) {
-                result.add(user);
+                findUser.setId(user.getId());
+                findUser.setName(user.getName());
+                findUser.setPhoneBook(user.getPhoneBook());
             }
         }
-        return result;
+      return findUser;
     }
 
     /**
