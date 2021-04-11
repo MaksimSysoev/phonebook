@@ -14,7 +14,7 @@
 > > 
 #
 > > #### - Видео демонстрации тестирования приложения.
-> > [![Смотреть](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/YOUTUBE--SOCIAL-PLAY.png/320px-YOUTUBE--SOCIAL-PLAY.png)](https://youtu.be/Y4RISW36vv8)
+> > [![Смотреть](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/YOUTUBE--SOCIAL-PLAY.png/320px-YOUTUBE--SOCIAL-PLAY.png)](https://youtu.be/D6EWK6dAcCU)
 
 #
 **1. Создание нового пользователя** 
