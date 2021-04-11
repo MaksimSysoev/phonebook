@@ -28,7 +28,7 @@ public class UserController {
      * Поиск всех пользователей по GET запросу curl -i http://localhost:8080/users/
      * @return
      */
-    @GetMapping("/")
+    @GetMapping("")
     public List<User> findAll() {
         return StreamSupport.stream(
                 this.users.findAll().spliterator(), false
@@ -54,7 +54,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @PostMapping(value = "/")
+    @PostMapping("")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         return new ResponseEntity<User> (
                 this.users.createUser(user)
@@ -67,7 +67,7 @@ public class UserController {
      * @param user обновлённый пользователь
      * @return
      */
-    @PutMapping("/")
+    @PutMapping("")
     public ResponseEntity<Void> update(@RequestBody User user) {
         this.users.update(user);
         return ResponseEntity.ok().build();
@@ -142,7 +142,7 @@ public class UserController {
      * @param userId пользователя
      * @return
      */
-    @GetMapping("/{userId}/phonebook/")
+    @GetMapping("/{userId}/phonebook")
     public List<PhoneBookEntry> findAllEntry(@PathVariable int userId) {
         return StreamSupport.stream(
                 this.users.findAllEntry(userId).spliterator(), false
