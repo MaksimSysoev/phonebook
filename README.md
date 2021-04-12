@@ -19,35 +19,35 @@
 #
 **1. Создание нового пользователя** 
 ```
-curl -H Content-Type:application/json -X POST -d "{\"name\":\"Maxim\",\"list\":"[""]"}" http://localhost:8080/users/
+curl -H Content-Type:application/json -X POST -d "{\"id\":\"0\",\"name\":\"Maxim\",\"list\":"[""]"}" http://localhost:8080/users
 ```
 ![Создание нового пользователя](images/1.jpg)
 #
 
 **2. Получение пользователя по id** 
 ```
-curl -i http://localhost:8080/users/1/
+curl -i http://localhost:8080/users/0
 ```
 ![Получение пользователя по id](images/2.jpg)
 #
 
-**3. Обновление пользователя с id=1** 
+**3. Обновление пользователя с id=0** 
 ```
-curl -i -H Content-Type:application/json -X PUT -d "{\"id\":\"1\",\"name\":\"Update User\"}" http://localhost:8080/users/
+curl -i -H Content-Type:application/json -X PUT -d "{\"id\":\"0\",\"name\":\"Update User\"}" http://localhost:8080/users
 ```
-![Обновление пользователя с id=1](images/3.jpg)
+![Обновление пользователя с id=0](images/3.jpg)
 #
 
-**4. Удаление пользователя с id=1** 
+**4. Удаление пользователя с id=0** 
 ```
-curl -i -X DELETE http://localhost:8080/users/1/
+curl -i -X DELETE http://localhost:8080/users/0
 ```
 ![Удаление пользователя с id=1](images/4.jpg)
 #
 
 **5. Получение всех пользователей**
 ```
-curl -i http://localhost:8080/users/
+curl -i http://localhost:8080/users
 ```
 ![Получение всех пользователей](images/5.jpg)
 #
@@ -67,7 +67,7 @@ curl -H Content-Type:application/json -X POST -d "{\"id\":\"2\",\"name\":\"User 
 
 **7. Обновление записи в телефонной книге пользователя**
 ```
-curl -i -H Content-Type:application/json -X PUT -d "{\"id\":\"1\",\"name\":\"Update User\",\"phone\":\"7654321\"}" http://localhost:8080/users/1/phonebook/
+curl -i -H Content-Type:application/json -X PUT -d "{\"id\":\"1\",\"name\":\"Update User\",\"phone\":\"7654321\"}" http://localhost:8080/users/0/phonebook/
 ```
 ![Обновление записи в телефонной книге пользователя](images/7.jpg)
 #
@@ -75,14 +75,14 @@ curl -i -H Content-Type:application/json -X PUT -d "{\"id\":\"1\",\"name\":\"Upd
 
 **8. Получение телефонной записи по её id**
 ```
-curl -i http://localhost:8080/users/1/phonebook/1/
+curl -i http://localhost:8080/users/0/phonebook/1/
 ```
 ![Получение телефонной записи по её id](images/8.jpg)
 #
 
 **9. Удаление записи у пользователя**
 ```
-curl -i -X DELETE http://localhost:8080/users/1/phonebook/1/
+curl -i -X DELETE http://localhost:8080/users/0/phonebook/1/
 ```
 ![Удаление записи у пользователя](images/9.jpg)
 #
@@ -90,7 +90,7 @@ curl -i -X DELETE http://localhost:8080/users/1/phonebook/1/
 
 **10. Получение всех записей в телефонной книге пользователя**
 ```
-curl -i http://localhost:8080/users/1/phonebook/
+curl -i http://localhost:8080/users/0/phonebook/
 ```
 ![Получение всех записей в телефонной книге пользователя](images/10.jpg)
 #
